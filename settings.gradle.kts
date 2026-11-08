@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google {
             content {
@@ -11,6 +12,7 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -19,6 +21,18 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Android RecruitmentTest App"
+rootProject.name = "AndroidRecruitmentTestApp"
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 include(":app")
-include(":data")
+include(":core:analytics")
+include(":core:common")
+include(":core:data")
+include(":core:database")
+include(":core:domain")
+include(":core:network")
+include(":core:testing")
+include(":core:ui")
+include(":feature:albums")
+include(":feature:details")

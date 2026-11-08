@@ -1,65 +1,45 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.leboncoin.android.application)
+    alias(libs.plugins.leboncoin.hilt)
 }
 
 android {
     namespace = "fr.leboncoin.androidrecruitmenttestapp"
-    compileSdk = 35
 
     defaultConfig {
         applicationId = "fr.leboncoin.androidrecruitmenttestapp"
-        minSdk = 24
-        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            // R8: code shrinking, optimization and obfuscation; unused resources removed.
+            isMinifyEnabled = true
+            isShrinkResources = true
+            // Debug signing so that the release build can be installed locally;
+            // replace with the real signing config on CI.
+            signingConfig = signingConfigs.getByName("debug")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-    buildFeatures {
-        compose = true
-    }
 }
 
-dependencies {
-    implementation(project(":data"))
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
+
+dependencies {
+    // The app module only assembles: DI graph, navigation, theme.
+    implementation(projects.core.data)
+    implementation(projects.core.ui)
+    implementation(projects.feature.albums)
+    implementation(projects.feature.details)
+
     implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(platform(libs.spark.bom))
-    implementation(libs.spark)
-    implementation(libs.coil.compose)
-    implementation(libs.coil.network.okhttp)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.navigation.compose)
+
     debugImplementation(libs.leakcanary.android)
 }
