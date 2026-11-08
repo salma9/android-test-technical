@@ -28,8 +28,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        analyticsHelper.initialize(this)
-
         setContent {
             SparkTheme {
                 AlbumsScreen(

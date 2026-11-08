@@ -8,7 +8,7 @@ class AnalyticsHelper {
     private var context: Context? = null
 
     fun initialize(context: Context) {
-        this.context = context
+        this.context = context.applicationContext
     }
 
     fun trackSelection(itemId: String) {
