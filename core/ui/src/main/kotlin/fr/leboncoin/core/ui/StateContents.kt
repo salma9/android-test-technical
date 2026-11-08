@@ -33,6 +33,7 @@ fun MessageContent(
     message: String,
     modifier: Modifier = Modifier,
     onRetry: (() -> Unit)? = null,
+    retryLabel: String = stringResource(R.string.core_ui_retry),
 ) {
     Column(
         modifier = modifier
@@ -54,7 +55,7 @@ fun MessageContent(
         )
         if (onRetry != null) {
             ButtonFilled(onClick = onRetry) {
-                Text(text = stringResource(R.string.core_ui_retry))
+                Text(text = retryLabel)
             }
         }
     }

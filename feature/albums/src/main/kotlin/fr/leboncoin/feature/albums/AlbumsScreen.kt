@@ -1,5 +1,6 @@
 package fr.leboncoin.feature.albums
 
+import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,6 +27,7 @@ import androidx.paging.compose.itemKey
 import com.adevinta.spark.ExperimentalSparkApi
 import com.adevinta.spark.components.appbar.TopAppBar
 import com.adevinta.spark.components.chips.ChipSelectable
+import com.adevinta.spark.components.navigation.UpNavigationIcon
 import com.adevinta.spark.components.scaffold.Scaffold
 import com.adevinta.spark.components.snackbars.SnackbarHost
 import com.adevinta.spark.components.text.Text
@@ -86,11 +88,19 @@ internal fun AlbumsScreen(
         }
     }
 
+    // The favorites filter acts as a sub-screen: back (top bar or system) returns to all albums.
+    BackHandler(enabled = uiState.favoritesOnly) { onFavoritesOnlyChange(false) }
+
     Scaffold(
         modifier = modifier,
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.feature_albums_title)) },
+                navigationIcon = {
+                    if (uiState.favoritesOnly) {
+                        UpNavigationIcon(onClick = { onFavoritesOnlyChange(false) })
+                    }
+                },
                 actions = {
                     ChipSelectable(
                         selected = uiState.favoritesOnly,
@@ -121,6 +131,8 @@ internal fun AlbumsScreen(
                 uiState.favoritesOnly -> MessageContent(
                     icon = SparkIcons.LikeOutline,
                     message = stringResource(R.string.feature_albums_no_favorites),
+                    onRetry = { onFavoritesOnlyChange(false) },
+                    retryLabel = stringResource(R.string.feature_albums_back_to_all),
                 )
 
                 error != null -> MessageContent(
